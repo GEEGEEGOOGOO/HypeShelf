@@ -11,12 +11,12 @@ import { RecommendationList } from "@/components/RecommendationList";
 import { type Genre } from "@/lib/genres";
 import { Star, Layers } from "lucide-react";
 
-type GenreFilter = Genre | "all";
+type SelectedGenre = Genre | "all";
 
 export default function ShelfPage() {
     const { user } = useUser();
     const recs = useQuery(api.recommendations.getAll);
-    const [genreFilter, setGenreFilter] = useState<GenreFilter>("all");
+    const [genreFilter, setGenreFilter] = useState<SelectedGenre>("all");
     const [staffPickOnly, setStaffPickOnly] = useState(false);
 
     // Derive role from Clerk publicMetadata

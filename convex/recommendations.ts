@@ -3,10 +3,12 @@ import { v } from "convex/values";
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
+const ALLOWED_PROTOCOLS = ["http:", "https:"];
+
 function isValidUrl(str: string): boolean {
     try {
-        new URL(str);
-        return true;
+        const url = new URL(str);
+        return ALLOWED_PROTOCOLS.includes(url.protocol);
     } catch {
         return false;
     }
@@ -48,7 +50,8 @@ function getRoleFromIdentity(identity: Record<string, unknown>): string | undefi
 export const getPublicLatest = query({
     args: { limit: v.optional(v.number()) },
     handler: async (ctx, args) => {
-        const limit = args.limit ?? 6;
+        // Cap at 20 — prevents unbounded queries from crafted callers
+        const limit = Math.min(args.limit ?? 6, 20);
         const recs = await ctx.db
             .query("recommendations")
             .order("desc")
