@@ -17,7 +17,7 @@ export function ShelfTourButton() {
             showProgress: false,
             animate: true,
             allowClose: false,
-            keyboardControl: false, // Force them to click to continue
+            allowKeyboardControl: false, // Force them to click to continue
             steps: [
                 {
                     element: "#add-rec-toggle",

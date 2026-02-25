@@ -85,7 +85,7 @@ export function HomeTourButton() {
       showProgress: false,
       animate: true,
       allowClose: false,
-      keyboardControl: false, // force interaction
+      allowKeyboardControl: false, // force interaction
       steps: steps
     });
 
