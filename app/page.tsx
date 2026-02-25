@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { Clapperboard, Sparkles, ArrowRight, Zap } from "lucide-react";
 import { PublicShelf } from "@/components/PublicShelf";
 import { RecommendationList } from "@/components/RecommendationList";
+import { HomeTourButton } from "@/components/HomeTourButton";
 
 export default function HomePage() {
   return (
@@ -55,7 +56,7 @@ export default function HomePage() {
           Shared recommendations for your crew
         </div>
 
-        <h1 className="mb-6 text-5xl font-extrabold leading-tight tracking-tight sm:text-6xl lg:text-7xl">
+        <h1 className="hero-heading mb-6 text-5xl font-extrabold leading-tight tracking-tight sm:text-6xl lg:text-7xl">
           Collect and share{" "}
           <span className="bg-gradient-to-r from-violet-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent">
             the stuff
@@ -91,6 +92,7 @@ export default function HomePage() {
               Go to my shelf <ArrowRight className="h-4 w-4" />
             </Link>
           </SignedIn>
+          <HomeTourButton />
         </div>
 
         {/* Feature pills */}

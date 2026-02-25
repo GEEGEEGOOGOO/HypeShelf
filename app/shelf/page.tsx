@@ -8,6 +8,7 @@ import { useState } from "react";
 import { AddRecommendationForm } from "@/components/AddRecommendationForm";
 import { GenreFilter } from "@/components/GenreFilter";
 import { RecommendationList } from "@/components/RecommendationList";
+import { ShelfTourButton } from "@/components/ShelfTourButton";
 import { type Genre } from "@/lib/genres";
 import { Star, Layers } from "lucide-react";
 
@@ -38,25 +39,30 @@ export default function ShelfPage() {
     return (
         <div className="mx-auto max-w-6xl px-6 py-10">
             {/* Page header */}
-            <div className="mb-8">
-                <h1 className="text-3xl font-extrabold tracking-tight text-zinc-100">
-                    The Shelf
-                </h1>
-                <p className="mt-1 text-sm text-zinc-500">
-                    {recs !== undefined
-                        ? `${recs.length} recommendation${recs.length !== 1 ? "s" : ""} from your crew`
-                        : "Loading…"}
-                </p>
+            <div className="mb-8 flex items-end justify-between">
+                <div>
+                    <h1 className="text-3xl font-extrabold tracking-tight text-zinc-100">
+                        The Shelf
+                    </h1>
+                    <p className="mt-1 text-sm text-zinc-500">
+                        {recs !== undefined
+                            ? `${recs.length} recommendation${recs.length !== 1 ? "s" : ""} from your crew`
+                            : "Loading…"}
+                    </p>
+                </div>
+                <ShelfTourButton />
             </div>
 
             {/* Add form */}
-            <div className="mb-8">
+            <div className="mb-8 add-rec-form">
                 <AddRecommendationForm />
             </div>
 
             {/* Filters */}
             <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <GenreFilter selected={genreFilter} onChange={setGenreFilter} />
+                <div className="genre-filters">
+                    <GenreFilter selected={genreFilter} onChange={setGenreFilter} />
+                </div>
 
                 {/* Staff pick toggle */}
                 <button
@@ -85,16 +91,18 @@ export default function ShelfPage() {
             )}
 
             {/* Recommendation list */}
-            <RecommendationList
-                recs={filtered}
-                currentUserId={currentUserId}
-                isAdmin={isAdmin}
-                emptyMessage={
-                    genreFilter !== "all" || staffPickOnly
-                        ? "No recommendations match this filter."
-                        : "No recommendations yet — be the first!"
-                }
-            />
+            <div className="recs-list">
+                <RecommendationList
+                    recs={filtered}
+                    currentUserId={currentUserId}
+                    isAdmin={isAdmin}
+                    emptyMessage={
+                        genreFilter !== "all" || staffPickOnly
+                            ? "No recommendations match this filter."
+                            : "No recommendations yet — be the first!"
+                    }
+                />
+            </div>
         </div>
     );
 }
