@@ -5,7 +5,7 @@ import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { z } from "zod";
 import { toast } from "sonner";
-import { Plus, Loader2, ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Loader2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,8 +18,6 @@ import {
 } from "@/components/ui/select";
 import { GENRES, GENRE_LABELS, type Genre } from "@/lib/genres";
 import { cn } from "@/lib/utils";
-
-// ─── Zod schema ──────────────────────────────────────────────────────────────
 
 const formSchema = z.object({
     title: z
@@ -44,8 +42,6 @@ const EMPTY_FORM: FormData = {
     blurb: "",
 };
 
-// ─── Component ───────────────────────────────────────────────────────────────
-
 export function AddRecommendationForm() {
     const [open, setOpen] = useState(false);
     const [form, setForm] = useState<FormData>(EMPTY_FORM);
@@ -56,7 +52,6 @@ export function AddRecommendationForm() {
 
     function setField<K extends keyof FormData>(key: K, value: FormData[K]) {
         setForm((prev) => ({ ...prev, [key]: value }));
-        // Clear error on change
         if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
     }
 
@@ -77,7 +72,7 @@ export function AddRecommendationForm() {
         setSubmitting(true);
         try {
             await createRec(result.data);
-            toast.success("Recommendation added! 🎉");
+            toast.success("Recommendation added");
             setForm(EMPTY_FORM);
             setErrors({});
             setOpen(false);
@@ -90,36 +85,35 @@ export function AddRecommendationForm() {
     }
 
     return (
-        <div className="rounded-xl border border-white/10 bg-white/4 backdrop-blur-sm">
-            {/* Toggle header */}
+        <div className="overflow-hidden border border-stone-200/12 bg-stone-950/28 shadow-[0_24px_70px_rgba(0,0,0,0.24)] backdrop-blur-sm">
             <button
                 id="add-rec-toggle"
                 onClick={() => setOpen((v) => !v)}
-                className="flex w-full items-center justify-between px-5 py-4 text-left transition-colors hover:bg-white/4"
+                className="pressable flex w-full items-center justify-between px-5 py-4 text-left hover:bg-amber-200/6"
             >
-                <span className="flex items-center gap-2 font-semibold text-zinc-200">
-                    <Plus className="h-4 w-4 text-violet-400" />
+                <span className="flex items-center gap-2 font-black text-stone-100">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-md border border-amber-300/24 bg-amber-300/10">
+                        <Plus className="h-4 w-4 text-amber-200" />
+                    </span>
                     Add a recommendation
                 </span>
                 {open ? (
-                    <ChevronUp className="h-4 w-4 text-zinc-500" />
+                    <ChevronUp className="h-4 w-4 text-stone-500" />
                 ) : (
-                    <ChevronDown className="h-4 w-4 text-zinc-500" />
+                    <ChevronDown className="h-4 w-4 text-stone-500" />
                 )}
             </button>
 
-            {/* Form body */}
             {open && (
                 <form
                     id="add-rec-form"
                     onSubmit={handleSubmit}
-                    className="border-t border-white/8 px-5 pb-5 pt-4"
+                    className="border-t border-stone-200/10 px-5 pb-5 pt-4"
                 >
                     <div className="grid gap-4 sm:grid-cols-2">
-                        {/* Title */}
                         <div className="flex flex-col gap-1.5">
-                            <label htmlFor="rec-title" className="text-xs font-medium text-zinc-400">
-                                Title <span className="text-red-400">*</span>
+                            <label htmlFor="rec-title" className="text-xs font-black uppercase tracking-[0.12em] text-stone-400">
+                                Title <span className="text-red-300">*</span>
                             </label>
                             <Input
                                 id="rec-title"
@@ -128,19 +122,16 @@ export function AddRecommendationForm() {
                                 onChange={(e) => setField("title", e.target.value)}
                                 maxLength={100}
                                 className={cn(
-                                    "bg-white/5 border-white/10 text-zinc-100 placeholder:text-zinc-600 focus-visible:ring-violet-500/50",
-                                    errors.title && "border-red-500/50"
+                                    "border-stone-200/12 bg-stone-950/40 text-stone-100 placeholder:text-stone-600 focus-visible:ring-amber-300/35",
+                                    errors.title && "border-red-400/60"
                                 )}
                             />
-                            {errors.title && (
-                                <p className="text-xs text-red-400">{errors.title}</p>
-                            )}
+                            {errors.title && <p className="text-xs text-red-300">{errors.title}</p>}
                         </div>
 
-                        {/* Genre */}
                         <div className="flex flex-col gap-1.5">
-                            <label htmlFor="rec-genre" className="text-xs font-medium text-zinc-400">
-                                Genre <span className="text-red-400">*</span>
+                            <label htmlFor="rec-genre" className="text-xs font-black uppercase tracking-[0.12em] text-stone-400">
+                                Genre <span className="text-red-300">*</span>
                             </label>
                             <Select
                                 value={form.genre}
@@ -149,33 +140,30 @@ export function AddRecommendationForm() {
                                 <SelectTrigger
                                     id="rec-genre"
                                     className={cn(
-                                        "bg-white/5 border-white/10 text-zinc-100 focus:ring-violet-500/50",
-                                        errors.genre && "border-red-500/50"
+                                        "w-full border-stone-200/12 bg-stone-950/40 text-stone-100 focus:ring-amber-300/35",
+                                        errors.genre && "border-red-400/60"
                                     )}
                                 >
                                     <SelectValue placeholder="Select genre" />
                                 </SelectTrigger>
-                                <SelectContent className="bg-zinc-900 border-white/10">
+                                <SelectContent className="border-stone-200/12 bg-stone-950 text-stone-100">
                                     {GENRES.map((g) => (
                                         <SelectItem
                                             key={g}
                                             value={g}
-                                            className="text-zinc-200 focus:bg-violet-500/20 focus:text-violet-200"
+                                            className="cursor-pointer text-stone-200 focus:bg-amber-300/14 focus:text-amber-100"
                                         >
                                             {GENRE_LABELS[g]}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
-                            {errors.genre && (
-                                <p className="text-xs text-red-400">{errors.genre}</p>
-                            )}
+                            {errors.genre && <p className="text-xs text-red-300">{errors.genre}</p>}
                         </div>
 
-                        {/* Link */}
                         <div className="flex flex-col gap-1.5 sm:col-span-2">
-                            <label htmlFor="rec-link" className="text-xs font-medium text-zinc-400">
-                                Link <span className="text-red-400">*</span>
+                            <label htmlFor="rec-link" className="text-xs font-black uppercase tracking-[0.12em] text-stone-400">
+                                Link <span className="text-red-300">*</span>
                             </label>
                             <Input
                                 id="rec-link"
@@ -184,25 +172,22 @@ export function AddRecommendationForm() {
                                 value={form.link}
                                 onChange={(e) => setField("link", e.target.value)}
                                 className={cn(
-                                    "bg-white/5 border-white/10 text-zinc-100 placeholder:text-zinc-600 focus-visible:ring-violet-500/50",
-                                    errors.link && "border-red-500/50"
+                                    "border-stone-200/12 bg-stone-950/40 text-stone-100 placeholder:text-stone-600 focus-visible:ring-amber-300/35",
+                                    errors.link && "border-red-400/60"
                                 )}
                             />
-                            {errors.link && (
-                                <p className="text-xs text-red-400">{errors.link}</p>
-                            )}
+                            {errors.link && <p className="text-xs text-red-300">{errors.link}</p>}
                         </div>
 
-                        {/* Blurb */}
                         <div className="flex flex-col gap-1.5 sm:col-span-2">
                             <div className="flex items-center justify-between">
-                                <label htmlFor="rec-blurb" className="text-xs font-medium text-zinc-400">
-                                    Blurb <span className="text-red-400">*</span>
+                                <label htmlFor="rec-blurb" className="text-xs font-black uppercase tracking-[0.12em] text-stone-400">
+                                    Blurb <span className="text-red-300">*</span>
                                 </label>
                                 <span
                                     className={cn(
                                         "text-xs tabular-nums",
-                                        form.blurb.length > 260 ? "text-red-400" : "text-zinc-600"
+                                        form.blurb.length > 260 ? "text-red-300" : "text-stone-600"
                                     )}
                                 >
                                     {form.blurb.length}/280
@@ -216,28 +201,25 @@ export function AddRecommendationForm() {
                                 maxLength={280}
                                 rows={3}
                                 className={cn(
-                                    "resize-none bg-white/5 border-white/10 text-zinc-100 placeholder:text-zinc-600 focus-visible:ring-violet-500/50",
-                                    errors.blurb && "border-red-500/50"
+                                    "resize-none border-stone-200/12 bg-stone-950/40 text-stone-100 placeholder:text-stone-600 focus-visible:ring-amber-300/35",
+                                    errors.blurb && "border-red-400/60"
                                 )}
                             />
-                            {errors.blurb && (
-                                <p className="text-xs text-red-400">{errors.blurb}</p>
-                            )}
+                            {errors.blurb && <p className="text-xs text-red-300">{errors.blurb}</p>}
                         </div>
                     </div>
 
-                    {/* Submit */}
                     <div className="mt-4 flex justify-end">
                         <Button
                             id="add-rec-submit"
                             type="submit"
                             disabled={submitting}
-                            className="bg-violet-600 hover:bg-violet-500 text-white shadow-[0_0_20px_rgba(139,92,246,0.3)] hover:shadow-[0_0_28px_rgba(139,92,246,0.5)] transition-all"
+                            className="pressable bg-amber-300 font-black text-stone-950 shadow-[0_14px_34px_rgba(217,151,61,0.22)] hover:bg-amber-200"
                         >
                             {submitting ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Adding…
+                                    Adding...
                                 </>
                             ) : (
                                 <>

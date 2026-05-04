@@ -10,7 +10,7 @@ import { GenreFilter } from "@/components/GenreFilter";
 import { RecommendationList } from "@/components/RecommendationList";
 import { ShelfTourButton } from "@/components/ShelfTourButton";
 import { type Genre } from "@/lib/genres";
-import { Star, Layers } from "lucide-react";
+import { Layers, Star } from "lucide-react";
 
 type SelectedGenre = Genre | "all";
 
@@ -20,12 +20,10 @@ export default function ShelfPage() {
     const [genreFilter, setGenreFilter] = useState<SelectedGenre>("all");
     const [staffPickOnly, setStaffPickOnly] = useState(false);
 
-    // Derive role from Clerk publicMetadata
     const isAdmin =
         (user?.publicMetadata as { role?: string } | undefined)?.role === "admin";
     const currentUserId = user?.id;
 
-    // Client-side filtering (PDR-005)
     const typedRecs = recs as Doc<"recommendations">[] | undefined;
     const filtered: Doc<"recommendations">[] | undefined = typedRecs
         ? typedRecs.filter((rec: Doc<"recommendations">) => {
@@ -35,62 +33,58 @@ export default function ShelfPage() {
         })
         : undefined;
 
-
     return (
-        <div className="mx-auto max-w-6xl px-6 py-10">
-            {/* Page header */}
-            <div className="mb-8 flex items-end justify-between">
+        <div className="mx-auto max-w-6xl px-5 py-10 sm:px-6 lg:py-12">
+            <div className="mb-8 flex flex-col gap-5 border-b border-stone-200/10 pb-8 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                    <h1 className="text-3xl font-extrabold tracking-tight text-zinc-100">
+                    <p className="text-xs font-black uppercase tracking-[0.22em] text-amber-200/65">
+                        Private Room
+                    </p>
+                    <h1 className="font-display mt-2 text-5xl font-black tracking-normal text-stone-50 sm:text-6xl">
                         The Shelf
                     </h1>
-                    <p className="mt-1 text-sm text-zinc-500">
+                    <p className="mt-3 text-sm text-stone-400">
                         {recs !== undefined
                             ? `${recs.length} recommendation${recs.length !== 1 ? "s" : ""} from your crew`
-                            : "Loading…"}
+                            : "Loading..."}
                     </p>
                 </div>
                 <ShelfTourButton />
             </div>
 
-            {/* Add form */}
-            <div className="mb-8 add-rec-form">
+            <div className="add-rec-form mb-8">
                 <AddRecommendationForm />
             </div>
 
-            {/* Filters */}
-            <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="genre-filters">
                     <GenreFilter selected={genreFilter} onChange={setGenreFilter} />
                 </div>
 
-                {/* Staff pick toggle */}
                 <button
                     id="staff-pick-filter"
                     onClick={() => setStaffPickOnly((v) => !v)}
-                    className={`flex shrink-0 items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-medium transition-all duration-200 ${staffPickOnly
-                        ? "border-amber-500/50 bg-amber-500/15 text-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.2)]"
-                        : "border-white/10 bg-white/5 text-zinc-400 hover:border-white/20 hover:bg-white/10 hover:text-zinc-200"
+                    className={`pressable flex shrink-0 items-center gap-2 rounded-md border px-4 py-2 text-sm font-black ${staffPickOnly
+                        ? "border-amber-300/55 bg-amber-300/18 text-amber-100 shadow-[0_14px_34px_rgba(217,151,61,0.14)]"
+                        : "border-stone-200/12 bg-stone-950/28 text-stone-400 hover:border-amber-200/35 hover:bg-amber-200/8 hover:text-stone-100"
                         }`}
                 >
                     <Star
-                        className={`h-3.5 w-3.5 ${staffPickOnly ? "fill-amber-400 text-amber-400" : ""}`}
+                        className={`h-3.5 w-3.5 ${staffPickOnly ? "fill-amber-300 text-amber-300" : ""}`}
                     />
                     Staff Picks
                 </button>
             </div>
 
-            {/* Results count when filtering */}
             {(genreFilter !== "all" || staffPickOnly) && filtered !== undefined && (
-                <div className="mb-4 flex items-center gap-2 text-sm text-zinc-500">
-                    <Layers className="h-4 w-4" />
+                <div className="mb-4 flex items-center gap-2 text-sm text-stone-400">
+                    <Layers className="h-4 w-4 text-amber-200/70" />
                     <span>
                         Showing {filtered.length} of {recs?.length ?? 0} recommendations
                     </span>
                 </div>
             )}
 
-            {/* Recommendation list */}
             <div className="recs-list">
                 <RecommendationList
                     recs={filtered}
@@ -99,7 +93,7 @@ export default function ShelfPage() {
                     emptyMessage={
                         genreFilter !== "all" || staffPickOnly
                             ? "No recommendations match this filter."
-                            : "No recommendations yet — be the first!"
+                            : "No recommendations yet - be the first!"
                     }
                 />
             </div>

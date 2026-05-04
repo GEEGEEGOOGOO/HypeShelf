@@ -13,24 +13,24 @@ export default async function ShelfLayout({
     if (!userId) redirect("/sign-in");
 
     return (
-        <div className="min-h-screen bg-[#0a0a0f] text-zinc-100">
-            {/* Ambient glow */}
+        <div className="cinema-shell min-h-screen overflow-hidden text-stone-100">
+            <div className="grain-overlay pointer-events-none fixed inset-0" />
             <div className="pointer-events-none fixed inset-0 overflow-hidden">
-                <div className="absolute -top-40 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-violet-600/8 blur-[120px]" />
+                <div className="absolute left-0 top-24 h-px w-full bg-gradient-to-r from-transparent via-amber-200/20 to-transparent" />
+                <div className="absolute -right-24 top-16 h-80 w-80 rounded-full border border-teal-200/10" />
             </div>
 
-            {/* Header */}
-            <header className="relative z-10 border-b border-white/6 backdrop-blur-sm">
+            <header className="relative z-10 border-b border-stone-200/10 bg-stone-950/18 backdrop-blur-md">
                 <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-                    <Link href="/" className="flex items-center gap-2.5 group">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-600/20 border border-violet-500/30 transition-all group-hover:bg-violet-600/30">
-                            <Clapperboard className="h-4 w-4 text-violet-400" />
+                    <Link href="/" className="group flex items-center gap-3">
+                        <div className="pressable flex h-10 w-10 items-center justify-center rounded-md border border-amber-300/30 bg-amber-200/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] group-hover:border-amber-200/60 group-hover:bg-amber-200/16">
+                            <Clapperboard className="h-5 w-5 text-amber-200" />
                         </div>
-                        <span className="font-bold text-zinc-100 tracking-tight">HypeShelf</span>
+                        <span className="font-display text-xl font-black tracking-normal text-stone-50">HypeShelf</span>
                     </Link>
 
                     <div className="flex items-center gap-3">
-                        <span className="hidden text-sm text-zinc-500 sm:block">
+                        <span className="hidden text-xs font-black uppercase tracking-[0.22em] text-amber-200/60 sm:block">
                             Your shelf
                         </span>
                         <UserButton

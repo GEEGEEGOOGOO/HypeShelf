@@ -1,22 +1,23 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Bricolage_Grotesque, Fraunces } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 import { ConvexClerkProvider } from "@/components/ConvexClerkProvider";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const display = Fraunces({
+  variable: "--font-display",
   subsets: ["latin"],
+  axes: ["SOFT", "WONK", "opsz"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const sans = Bricolage_Grotesque({
+  variable: "--font-body",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "HypeShelf — Collect and share the stuff you're hyped about",
+  title: "HypeShelf - Collect and share the stuff you're hyped about",
   description:
     "HypeShelf is a shared recommendations hub where friends log in and post their favourite movies and shows. Discover what your crew is hyped about.",
   openGraph: {
@@ -35,7 +36,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className="dark">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background text-foreground`}
+          className={`${display.variable} ${sans.variable} min-h-screen bg-background text-foreground antialiased`}
         >
           <ConvexClerkProvider>
             {children}

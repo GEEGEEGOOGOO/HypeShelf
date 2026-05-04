@@ -38,7 +38,7 @@ export function DeleteButton({ id, className }: DeleteButtonProps) {
             disabled={loading}
             aria-label="Delete recommendation"
             className={cn(
-                "rounded-md p-1.5 text-zinc-500 transition-colors hover:bg-red-500/10 hover:text-red-400 disabled:opacity-50",
+                "pressable rounded-md p-1.5 text-stone-500 hover:bg-red-400/10 hover:text-red-300 disabled:opacity-50",
                 className
             )}
         >

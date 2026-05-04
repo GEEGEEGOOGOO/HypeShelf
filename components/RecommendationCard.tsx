@@ -16,7 +16,6 @@ interface RecommendationCardProps {
     rec: Doc<"recommendations">;
     currentUserId?: string;
     isAdmin?: boolean;
-    /** If true, hides all interactive controls (public landing page) */
     readOnly?: boolean;
 }
 
@@ -57,7 +56,7 @@ export function RecommendationCard({
         setStaffPickLoading(true);
         try {
             await markStaffPick({ id: rec._id, value: !rec.isStaffPick });
-            toast.success(rec.isStaffPick ? "Staff pick removed" : "Marked as staff pick ⭐");
+            toast.success(rec.isStaffPick ? "Staff pick removed" : "Marked as staff pick");
         } catch (err: unknown) {
             const message = err instanceof Error ? err.message : "Failed to update";
             toast.error(message);
@@ -69,16 +68,16 @@ export function RecommendationCard({
     return (
         <article
             className={cn(
-                "group relative flex flex-col gap-3 rounded-xl border border-white/8 bg-white/4 p-5 backdrop-blur-sm transition-all duration-300",
-                "hover:border-white/15 hover:bg-white/6 hover:shadow-[0_8px_32px_rgba(0,0,0,0.4)]",
-                rec.isStaffPick && "border-amber-500/20 bg-amber-500/4"
+                "group relative flex min-h-64 flex-col gap-4 overflow-hidden border border-stone-200/10 bg-stone-950/32 p-5 shadow-[0_24px_60px_rgba(0,0,0,0.2)] backdrop-blur-sm",
+                "transition-[border-color,background-color,box-shadow] duration-200 hover:border-amber-200/28 hover:bg-stone-900/46 hover:shadow-[0_30px_80px_rgba(0,0,0,0.32)]",
+                "before:absolute before:inset-x-0 before:top-0 before:h-1 before:bg-gradient-to-r before:from-amber-300/70 before:via-orange-300/70 before:to-teal-300/60 before:opacity-0 before:transition-opacity before:duration-200 hover:before:opacity-100",
+                rec.isStaffPick && "border-amber-300/24 bg-amber-300/7 before:opacity-100"
             )}
         >
-            {/* Top row: genre badge + staff pick badge */}
             <div className="flex items-center justify-between gap-2">
                 <span
                     className={cn(
-                        "inline-block rounded-full border px-2.5 py-0.5 text-xs font-semibold",
+                        "inline-block rounded-md border px-2.5 py-1 text-xs font-black uppercase tracking-[0.12em]",
                         GENRE_COLORS[rec.genre as Genre]
                     )}
                 >
@@ -87,40 +86,36 @@ export function RecommendationCard({
                 {rec.isStaffPick && <StaffPickBadge />}
             </div>
 
-            {/* Title */}
             <a
                 href={rec.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group/link flex items-start gap-1.5"
+                className="group/link flex items-start gap-2"
                 id={`rec-link-${rec._id}`}
             >
-                <h3 className="text-base font-semibold leading-snug text-zinc-100 transition-colors group-hover/link:text-violet-300">
+                <h3 className="font-display text-2xl font-black leading-[1.02] text-stone-50 transition-colors duration-200 group-hover/link:text-amber-100">
                     {rec.title}
                 </h3>
-                <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0 text-zinc-500 transition-colors group-hover/link:text-violet-400" />
+                <ExternalLink className="mt-1 h-4 w-4 shrink-0 text-stone-500 transition-colors duration-200 group-hover/link:text-amber-200" />
             </a>
 
-            {/* Blurb */}
-            <p className="text-sm leading-relaxed text-zinc-400 line-clamp-3">{rec.blurb}</p>
+            <p className="line-clamp-3 text-sm leading-6 text-stone-400">{rec.blurb}</p>
 
-            {/* Footer: author + time + actions */}
-            <div className="mt-auto flex items-center justify-between gap-2 pt-1">
-                <div className="flex items-center gap-2 min-w-0">
-                    <Avatar className="h-6 w-6 shrink-0">
+            <div className="mt-auto flex items-center justify-between gap-2 border-t border-stone-200/10 pt-4">
+                <div className="flex min-w-0 items-center gap-2">
+                    <Avatar className="h-7 w-7 shrink-0 border border-stone-200/14">
                         <AvatarImage src={rec.userImage} alt={rec.userName} />
-                        <AvatarFallback className="bg-violet-900/60 text-violet-200 text-xs">
+                        <AvatarFallback className="bg-amber-300/15 text-xs font-black text-amber-100">
                             {getInitials(rec.userName)}
                         </AvatarFallback>
                     </Avatar>
-                    <span className="truncate text-xs text-zinc-500">
-                        <span className="text-zinc-400">{rec.userName}</span>
-                        {" · "}
+                    <span className="truncate text-xs text-stone-500">
+                        <span className="font-semibold text-stone-300">{rec.userName}</span>
+                        {" / "}
                         {timeAgo(rec._creationTime)}
                     </span>
                 </div>
 
-                {/* Action buttons */}
                 <div className="flex shrink-0 items-center gap-1">
                     {canToggleStaffPick && (
                         <button
@@ -129,14 +124,14 @@ export function RecommendationCard({
                             disabled={staffPickLoading}
                             aria-label={rec.isStaffPick ? "Remove staff pick" : "Mark as staff pick"}
                             className={cn(
-                                "rounded-md p-1.5 transition-colors disabled:opacity-50",
+                                "pressable rounded-md p-1.5 disabled:opacity-50",
                                 rec.isStaffPick
-                                    ? "text-amber-400 hover:bg-amber-500/10"
-                                    : "text-zinc-500 hover:bg-amber-500/10 hover:text-amber-400"
+                                    ? "text-amber-300 hover:bg-amber-300/10"
+                                    : "text-stone-500 hover:bg-amber-300/10 hover:text-amber-300"
                             )}
                         >
                             <Star
-                                className={cn("h-4 w-4", rec.isStaffPick && "fill-amber-400")}
+                                className={cn("h-4 w-4", rec.isStaffPick && "fill-amber-300")}
                             />
                         </button>
                     )}

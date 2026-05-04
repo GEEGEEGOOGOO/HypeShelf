@@ -17,11 +17,11 @@ export async function PublicShelf() {
 
     if (recs.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-white/10 py-16 text-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-violet-500/10">
-                    <Clapperboard className="h-7 w-7 text-violet-400" />
+            <div className="flex flex-col items-center justify-center gap-4 border border-dashed border-stone-200/16 bg-stone-950/24 px-6 py-16 text-center">
+                <div className="flex h-14 w-14 items-center justify-center rounded-md border border-amber-300/24 bg-amber-300/10">
+                    <Clapperboard className="h-7 w-7 text-amber-200" />
                 </div>
-                <p className="text-sm text-zinc-500">
+                <p className="text-sm text-stone-500">
                     No recommendations yet. Sign in and be the first!
                 </p>
             </div>

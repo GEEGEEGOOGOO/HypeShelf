@@ -15,13 +15,13 @@ interface RecommendationListProps {
 
 function CardSkeleton() {
     return (
-        <div className="flex flex-col gap-3 rounded-xl border border-white/8 bg-white/4 p-5">
-            <Skeleton className="h-5 w-20 rounded-full" />
-            <Skeleton className="h-5 w-3/4" />
+        <div className="flex min-h-64 flex-col gap-4 border border-stone-200/10 bg-stone-950/32 p-5">
+            <Skeleton className="h-6 w-24 rounded-md" />
+            <Skeleton className="h-8 w-4/5" />
             <Skeleton className="h-4 w-full" />
             <Skeleton className="h-4 w-5/6" />
-            <div className="flex items-center gap-2 pt-1">
-                <Skeleton className="h-6 w-6 rounded-full" />
+            <div className="mt-auto flex items-center gap-2 border-t border-stone-200/10 pt-4">
+                <Skeleton className="h-7 w-7 rounded-full" />
                 <Skeleton className="h-4 w-32" />
             </div>
         </div>
@@ -33,9 +33,8 @@ export function RecommendationList({
     currentUserId,
     isAdmin,
     readOnly = false,
-    emptyMessage = "No recommendations yet — be the first!",
+    emptyMessage = "No recommendations yet - be the first!",
 }: RecommendationListProps) {
-    // Loading state
     if (recs === undefined) {
         return (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -46,16 +45,15 @@ export function RecommendationList({
         );
     }
 
-    // Empty state
     if (recs.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-white/10 py-20 text-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-violet-500/10">
-                    <Clapperboard className="h-8 w-8 text-violet-400" />
+            <div className="flex flex-col items-center justify-center gap-4 border border-dashed border-stone-200/16 bg-stone-950/24 px-6 py-20 text-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-md border border-amber-300/24 bg-amber-300/10">
+                    <Clapperboard className="h-8 w-8 text-amber-200" />
                 </div>
                 <div>
-                    <p className="text-base font-medium text-zinc-300">{emptyMessage}</p>
-                    <p className="mt-1 text-sm text-zinc-500">
+                    <p className="font-display text-2xl font-black text-stone-100">{emptyMessage}</p>
+                    <p className="mt-2 text-sm text-stone-500">
                         Add your first recommendation above.
                     </p>
                 </div>
@@ -65,14 +63,19 @@ export function RecommendationList({
 
     return (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {recs.map((rec) => (
-                <RecommendationCard
+            {recs.map((rec, index) => (
+                <div
                     key={rec._id}
-                    rec={rec}
-                    currentUserId={currentUserId}
-                    isAdmin={isAdmin}
-                    readOnly={readOnly}
-                />
+                    className="stagger-in"
+                    style={{ animationDelay: `${Math.min(index, 8) * 45}ms` }}
+                >
+                    <RecommendationCard
+                        rec={rec}
+                        currentUserId={currentUserId}
+                        isAdmin={isAdmin}
+                        readOnly={readOnly}
+                    />
+                </div>
             ))}
         </div>
     );
